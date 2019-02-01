@@ -2,10 +2,10 @@
 
 The code in this repository was built with using the code from Jonathan Tay's github page at https://github.com/JonathanTay.
 
-#Code explanation
+# Code explanation
 All code produced output recorded metrics from the runs such as accuracy and time. The output was compiled in the folder called output. 
 
-#Code Policy
+# Code Policy
 This assignment is part of the homework for CS 7641 - Machine Learning class through Georgia Institute of Technology. Below,
 I have used the compilation of Professor IsBell's wisdom as well as others that were posted on Piazza. You can see more at https://github.com/cmaron/CS-7641-assignments.
 
