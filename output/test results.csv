@@ -1,0 +1,19 @@
+ANN,adult,0.786729564534046,{'MLP__activation': 'logistic', 'MLP__alpha': 0.001, 'MLP__hidden_layer_sizes': (12, 12)}
+ANN,wine,0.7264969863731656,{'MLP__activation': 'relu', 'MLP__alpha': 0.0001, 'MLP__hidden_layer_sizes': (22, 22, 22)}
+ANN,wine,0.6310272536687631,{'MLP__activation': 'relu', 'MLP__alpha': 1.0, 'MLP__hidden_layer_sizes': (5,)}
+Boost,wine,0.7542993317610064,{'Boost__base_estimator__alpha': 0.01, 'Boost__n_estimators': 20}
+Boost,adult,0.8946220768605548,{'Boost__base_estimator__alpha': 0.00031622776601683794, 'Boost__n_estimators': 20}
+DT,wine,0.6620233883647799,{'DT__alpha': -1, 'DT__class_weight': 'balanced', 'DT__criterion': 'gini'}
+DT,adult,0.8867452413542481,{'DT__alpha': -1, 'DT__class_weight': 'balanced', 'DT__criterion': 'gini'}
+SVM_RBF,small_adult,0.7779840848806366,{'SVM__alpha': 0.0001, 'SVM__gamma_frac': 1.6999999999999997, 'SVM__n_iter': 893}
+SVM_RBF,small_adult,0.8658700670796218,{'SVM__alpha': 0.0001, 'SVM__gamma_frac': 1.6999999999999997, 'SVM__n_iter': 893}
+SVM_RBF,wine,0.7681308962264151,{'SVM__alpha': 0.01, 'SVM__gamma_frac': 0.3, 'SVM__n_iter': 365}
+SVM_RBF,small_adult,0.7790682803277366,{'SVM__alpha': 0.001, 'SVM__gamma_frac': 1.2, 'SVM__n_iter': 447}
+SVM_RBF,wine,0.7681308962264151,{'SVM__alpha': 0.01, 'SVM__gamma_frac': 0.3, 'SVM__n_iter': 365}
+SVM_RBF,small_adult,0.7954173067076294,{'SVM__alpha': 0.01, 'SVM__gamma_frac': 1.6999999999999997, 'SVM__n_iter': 447}
+SVM_RBF,small_adult,0.8111605005859326,{'SVM__alpha': 0.01, 'SVM__gamma_frac': 1.2, 'SVM__n_iter': 447}
+SVM_RBF,small_adult,0.8292606516290727,{'SVM__alpha': 0.001, 'SVM__gamma_frac': 0.7, 'SVM__n_iter': 447}
+KNN,wine,0.7819624606918238,{'KNN__metric': 'manhattan', 'KNN__n_neighbors': 4, 'KNN__weights': 'distance'}
+KNN,wine,0.7761645047169812,{'KNN__metric': 'manhattan', 'KNN__n_neighbors': 6, 'KNN__weights': 'distance'}
+KNN,adult,0.9191668328925482,{'KNN__metric': 'manhattan', 'KNN__n_neighbors': 21, 'KNN__weights': 'distance'}
+ANN,wine,0.6310272536687631,{'MLP__activation': 'relu', 'MLP__alpha': 1.0, 'MLP__hidden_layer_sizes': (5,)}
