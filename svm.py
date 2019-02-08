@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
 import time
 from random import sample
-
+np.random.seed(55)
 class primalSVM_RBF(BaseEstimator, ClassifierMixin):
     '''http://scikit-learn.org/stable/developers/contributing.html'''
     
@@ -61,10 +61,8 @@ class primalSVM_RBF(BaseEstimator, ClassifierMixin):
      
 #path = 'C:/Users/cecil/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
 path = 'C:/Users/jasplund/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
-df_spam = pd.read_csv(path + 'spam_data.txt', sep=',', header=None)
-df_spam
 df_adult_train = pd.read_csv(path + 'adult.data', sep=',', header=None)
-df_adult_test = pd.read_csv(path + 'adult.data', sep=',', header=None)
+df_adult_test = pd.read_csv(path + 'adult.test', sep=',', header=None)
 df_adult_train.columns = ['age','workclass','fnlwgt','education','education_num',
                          'marital_status','occupation','relationship','race',
                          'sex','capital_gain','capital_loss','hours_per_week',
@@ -74,14 +72,12 @@ df_adult_test.columns = ['age','workclass','fnlwgt','education','education_num',
                          'sex','capital_gain','capital_loss','hours_per_week',
                          'native_country','income']
 adult_df = pd.concat([df_adult_train,df_adult_test],axis=0)
+adult_df.loc[adult_df['income']==' >50K.','income'] = ' >50K'
+adult_df.loc[adult_df['income']==' <=50K.','income'] = ' <=50K'
 vals = pd.get_dummies(adult_df)
 vals = vals.drop('income_ <=50K',1)
 vals.columns = np.append(vals.columns.values[:-1], ['income'])
-
-#adult_trnX = vals_trn.drop('income_ >50K',1).copy().values
-#adult_trnY = vals_trn['income_ >50K'].copy().values
-#adult_tstX = vals_tst.drop('income_ >50K',1).copy().values
-#adult_tstY = vals_tst['income_ >50K'].copy().values
+vals = vals.drop(['relationship_ Husband','workclass_ ?'],axis=1)
 
 sample_idx0 = sample(range(len(vals)),16000)
 medium_adult = vals.iloc[sample_idx0]
@@ -95,7 +91,7 @@ adultY = adultY.astype(float)
 sample_idx = sample(range(len(adultX)),4000)
 small_adultX = adultX[sample_idx]
 small_adultY = adultY[sample_idx]
-
+len(np.where(small_adultY==1))/len(small_adultY)
 wine = pd.read_csv(path+'winequality-white.csv',sep=';')
 wineX = wine.drop('quality',1).copy().values
 wineY = wine['quality']
@@ -172,10 +168,10 @@ curve_test_scores  = pd.DataFrame(index = curve[0],data = curve[2])
 curve_train_scores.to_csv('./output/{}_{}_LC_train.csv'.format(clf_type,dataset))
 curve_test_scores.to_csv('./output/{}_{}_LC_test.csv'.format(clf_type,dataset))
 end = time.time()
-print(end-start)
+#print(end-start)
 adult_clf = cv
 
-start = time.time()
+#start = time.time()
 wine_final_params = wine_clf.best_params_
 wine_OF_params = wine_final_params.copy()
 wine_OF_params['SVM__alpha'] = 1e-16

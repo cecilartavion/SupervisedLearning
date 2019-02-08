@@ -2,6 +2,7 @@ import sklearn.model_selection as ms
 from sklearn.ensemble import AdaBoostClassifier
 from helper import dtclf_pruned
 import pandas as pd
+import numpy as np
 from helper import  basicResults,makeTimingCurve,iterationLC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
@@ -12,10 +13,9 @@ import time
 
 #path = 'C:/Users/cecil/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
 path = 'C:/Users/jasplund/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
-df_spam = pd.read_csv(path + 'spam_data.txt', sep=',', header=None)
-df_spam
+
 df_adult_train = pd.read_csv(path + 'adult.data', sep=',', header=None)
-df_adult_test = pd.read_csv(path + 'adult.data', sep=',', header=None)
+df_adult_test = pd.read_csv(path + 'adult.test', sep=',', header=None)
 df_adult_train.columns = ['age','workclass','fnlwgt','education','education_num',
                          'marital_status','occupation','relationship','race',
                          'sex','capital_gain','capital_loss','hours_per_week',
@@ -25,15 +25,12 @@ df_adult_test.columns = ['age','workclass','fnlwgt','education','education_num',
                          'sex','capital_gain','capital_loss','hours_per_week',
                          'native_country','income']
 adult_df = pd.concat([df_adult_train,df_adult_test],axis=0)
+adult_df.loc[adult_df['income']==' >50K.','income'] = ' >50K'
+adult_df.loc[adult_df['income']==' <=50K.','income'] = ' <=50K'
 vals = pd.get_dummies(adult_df)
 vals = vals.drop('income_ <=50K',1)
 vals.columns = np.append(vals.columns.values[:-1], ['income'])
-
-#adult_trnX = vals_trn.drop('income_ >50K',1).copy().values
-#adult_trnY = vals_trn['income_ >50K'].copy().values
-#adult_tstX = vals_tst.drop('income_ >50K',1).copy().values
-#adult_tstY = vals_tst['income_ >50K'].copy().values
-
+vals = vals.drop(['relationship_ Husband','workclass_ ?'],axis=1)
 
 adultX = vals.drop('income',1).copy().values
 adultX = adultX.astype(float)
@@ -48,7 +45,7 @@ wineY[wineY.isin([1,2,3,4,5,6])] = 1
 wineY[wineY.isin([7,8,9,10])] = 0
 
 alphas = [-1,-1e-3,-(1e-3)*10**-0.5, -1e-2, -(1e-2)*10**-0.5,-1e-1,-(1e-1)*10**-0.5, 0, (1e-1)*10**-0.5,1e-1,(1e-2)*10**-0.5,1e-2,(1e-3)*10**-0.5,1e-3]
-
+len(alphas)
 adult_trnX, adult_tstX, adult_trnY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
 wine_trnX, wine_tstX, wine_trnY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)
    
@@ -56,11 +53,10 @@ wine_trnX, wine_tstX, wine_trnY, wine_tstY = ms.train_test_split(wineX, wineY, t
 wine_base = dtclf_pruned(criterion='gini',class_weight='balanced',random_state=55)                
 adult_base = dtclf_pruned(criterion='entropy',class_weight='balanced',random_state=55)
 OF_base = dtclf_pruned(criterion='gini',class_weight='balanced',random_state=55)                
-#paramsA= {'Boost__n_estimators':[1,2,5,10,20,30,40,50],'Boost__learning_rate':[(2**x)/100 for x in range(8)]+[1]}
+
 paramsA= {'Boost__n_estimators':[1,2,5,10,20,30,45],
           'Boost__base_estimator__alpha':alphas}
-#paramsM = {'Boost__n_estimators':[1,2,5,10,20,30,40,50,60,70,80,90,100],
-#           'Boost__learning_rate':[(2**x)/100 for x in range(8)]+[1]}
+
 
 paramsW = {'Boost__n_estimators':[1,2,5,10,20,30,45,60,80,100],
            'Boost__base_estimator__alpha':alphas}

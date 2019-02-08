@@ -25,10 +25,8 @@ def DTpruningVSnodes(clf,alphas,trgX,trgY,dataset):
 
 #path = 'C:/Users/cecil/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
 path = 'C:/Users/jasplund/Dropbox/Dalton State College/georgia_tech/CSE7641/supervisor_learning/'
-df_spam = pd.read_csv(path + 'spam_data.txt', sep=',', header=None)
-df_spam
 df_adult_train = pd.read_csv(path + 'adult.data', sep=',', header=None)
-df_adult_test = pd.read_csv(path + 'adult.data', sep=',', header=None)
+df_adult_test = pd.read_csv(path + 'adult.test', sep=',', header=None)
 df_adult_train.columns = ['age','workclass','fnlwgt','education','education_num',
                          'marital_status','occupation','relationship','race',
                          'sex','capital_gain','capital_loss','hours_per_week',
@@ -38,15 +36,12 @@ df_adult_test.columns = ['age','workclass','fnlwgt','education','education_num',
                          'sex','capital_gain','capital_loss','hours_per_week',
                          'native_country','income']
 adult_df = pd.concat([df_adult_train,df_adult_test],axis=0)
+adult_df.loc[adult_df['income']==' >50K.','income'] = ' >50K'
+adult_df.loc[adult_df['income']==' <=50K.','income'] = ' <=50K'
 vals = pd.get_dummies(adult_df)
 vals = vals.drop('income_ <=50K',1)
 vals.columns = np.append(vals.columns.values[:-1], ['income'])
-
-#adult_trnX = vals_trn.drop('income_ >50K',1).copy().values
-#adult_trnY = vals_trn['income_ >50K'].copy().values
-#adult_tstX = vals_tst.drop('income_ >50K',1).copy().values
-#adult_tstY = vals_tst['income_ >50K'].copy().values
-
+vals = vals.drop(['relationship_ Husband','workclass_ ?'],axis=1)
 
 adultX = vals.drop('income',1).copy().values
 adultX = adultX.astype(float)
@@ -63,18 +58,14 @@ wineY[wineY.isin([7,8,9,10])] = 0
 wineY = np.array(wineY)
 
 alphas = [-1,-1e-3,-(1e-3)*10**-0.5, -1e-2, -(1e-2)*10**-0.5,-1e-1,-(1e-1)*10**-0.5, 0, (1e-1)*10**-0.5,1e-1,(1e-2)*10**-0.5,1e-2,(1e-3)*10**-0.5,1e-3]
-
+len(alphas)
 adult_trnX, adult_tstX, adult_trnY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
 wine_trnX, wine_tstX, wine_trnY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)
    
 pipeA = Pipeline([('Scale',StandardScaler()),                 
                  ('DT',dtclf_pruned(random_state=55))])
 
-pipeW = Pipeline([('Scale',StandardScaler()),
-                 ('Cull1',SelectFromModel(RandomForestClassifier(random_state=1),threshold='median')),
-                 ('Cull2',SelectFromModel(RandomForestClassifier(random_state=2),threshold='median')),
-                 ('Cull3',SelectFromModel(RandomForestClassifier(random_state=3),threshold='median')),
-                 ('Cull4',SelectFromModel(RandomForestClassifier(random_state=4),threshold='median')),
+pipeW = Pipeline([('Scale',StandardScaler()),                 
                  ('DT',dtclf_pruned(random_state=55))])
                                    
          
