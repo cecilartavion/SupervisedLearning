@@ -3,7 +3,7 @@
 The code in this repository was built with using the code from Jonathan Tay's github page at https://github.com/JonathanTay.
 
 # Code explanation
-All code produced output recorded metrics from the runs such as accuracy and time. The output was compiled in the folder called output. Assignment 1 requires the use of Python 3.*. 
+All code produced output recorded metrics from the runs such as accuracy and time. The output was compiled in the folder called output. Assignment 1 requires the use of Python 3. 
 
 If a python virtual environment has been setup for the project, a simple `pip install -r requirements.txt` should take care of the required packages.
 
